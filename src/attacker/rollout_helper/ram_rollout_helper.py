@@ -29,7 +29,7 @@ class RamRolloutHelper(BaseRolloutHelper):
             action_enum_len=action_enum_len,
             baseline_obs_len=baseline_obs_dist,
         )
-        assert baseline_obs_dist == action_enum_len, "Baseline len greater than action enum len is not implemented."  
+        assert baseline_obs_dist == action_enum_len, "Baseline len greater than action enum len is not implemented."
         self.env = env
         self.obs_prediction_model = obs_prediction_model
         self.ram_prediction_model = ram_prediction_model
@@ -61,7 +61,7 @@ class RamRolloutHelper(BaseRolloutHelper):
                 current_agent_state = self.frame_cycler.cycle_frames(predicted_next_state)
 
         return torch.stack(list(predicted_ram_state_queue), dim=1)
-    
+
     def get_action_sequence(self, idx: int) -> tuple[int, ...]:
         return self.action_enumeration[idx]
 
@@ -89,9 +89,7 @@ class RamRolloutHelper(BaseRolloutHelper):
             if step > 0:
                 current_actions = current_actions.repeat(self.n_actions, 1)
 
-            predicted_next_ram_state, hidden = self.ram_prediction_model(
-                current_ram_state, current_actions, hidden
-            )
+            predicted_next_ram_state, hidden = self.ram_prediction_model(current_ram_state, current_actions, hidden)
             current_ram_state = predicted_next_ram_state.unsqueeze(dim=1).argmax(dim=-1)
 
         return current_ram_state[:, -1]

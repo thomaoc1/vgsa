@@ -48,10 +48,12 @@ class PredictionModelTrainerConfig:
     suffix: Optional[str] = None
     model_kwargs: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class RolloutHelperConfig:
     action_enum_len: int
     baseline_obs_dist: int
+
 
 @dataclass
 class AttackerConfig:

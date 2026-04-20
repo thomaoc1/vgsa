@@ -37,7 +37,7 @@ class ObsRolloutHelper(BaseRolloutHelper):
             current_state = self.frame_cycler.cycle_frames(predicted_next_pm_states)
 
         return current_state
-    
+
     def get_action_sequence(self, idx: int) -> tuple[int, ...]:
         return self.action_enumeration[idx]
 

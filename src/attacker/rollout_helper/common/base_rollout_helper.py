@@ -21,9 +21,9 @@ class BaseRolloutHelper(RolloutHelper):
         self.n_actions = n_actions
         self.action_enum_len = action_enum_len
         self.baseline_obs_dist = baseline_obs_len
-        
+
         actions = [action for action in range(n_actions)]
         self.onehot_action = F.one_hot(torch.tensor(actions), num_classes=self.n_actions)
         self.action_enumeration = list(product(actions, repeat=self.action_enum_len))
-        
+
         self.frame_cycler = FrameCycler()

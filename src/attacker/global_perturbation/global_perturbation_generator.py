@@ -1,4 +1,3 @@
-
 import torch
 import torch.nn.functional as F
 from attacks_on_drl.victim.common import BaseVictim
@@ -66,8 +65,7 @@ class GlobalPerturbationGenerator:
             )
 
         return delta.detach()
-    
-    
+
     def generate(self, train_loader: DataLoader, val_loader: DataLoader) -> dict[int, torch.Tensor]:
         masks = {}
         for a in range(self.n_actions):

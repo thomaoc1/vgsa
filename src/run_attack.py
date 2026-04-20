@@ -46,7 +46,9 @@ def init_vgsa(run_attack_cfg: RunAttackConfig, victim: BaseVictim, prediction_mo
 
     if attacker_cfg.is_encoded:
         obs_prediction_model = PolicyEncodingPredictionModel(n_actions)
-        obs_prediction_model.load_state_dict(torch.load(prediction_model_path_builder.prediction_model_weights, map_location="cpu"))
+        obs_prediction_model.load_state_dict(
+            torch.load(prediction_model_path_builder.prediction_model_weights, map_location="cpu")
+        )
 
         rollout_helper = EncObsRolloutHelper(
             enc_obs_prediction_model=obs_prediction_model,
@@ -78,10 +80,14 @@ def init_cpa(
     env_name = run_attack_cfg.gym_env.name
 
     obs_prediction_model = ObsPredictionModel(n_actions)
-    obs_prediction_model.load_state_dict(torch.load(prediction_model_path_builder.prediction_model_weights, map_location="cpu"))
+    obs_prediction_model.load_state_dict(
+        torch.load(prediction_model_path_builder.prediction_model_weights, map_location="cpu")
+    )
 
     ram_prediction_model = RamPredictionModel(n_actions)
-    ram_prediction_model.load_state_dict(torch.load(prediction_model_path_builder.ram_prediction_model_weights, map_location="cpu"))
+    ram_prediction_model.load_state_dict(
+        torch.load(prediction_model_path_builder.ram_prediction_model_weights, map_location="cpu")
+    )
 
     rollout_helper = RamRolloutHelper(
         env=env,
@@ -121,9 +127,7 @@ def init_attacker(
             prediction_model_path_builder=prediction_model_path_builder,
         )
     elif chosen_attacker.lower() == "sta":
-        attacker = StrategicallyTimedAttacker(
-            victim=victim, attack_threshold=run_attack_cfg.attacker.attack_threshold
-        )
+        attacker = StrategicallyTimedAttacker(victim=victim, attack_threshold=run_attack_cfg.attacker.attack_threshold)
     else:
         raise ValueError(f"Unknown attacker: {chosen_attacker}")
 
@@ -156,7 +160,9 @@ def main(cfg: DictConfig):
         "terminal_on_life_loss": run_attack_cfg.gym_env.name == "BreakoutNoFrameskip-v4",
         "clip_reward": False,
     }
-    env = init_env(run_attack_cfg.gym_env, atari_wrapper_args=atari_wrapper_args, is_ram_env=run_attack_cfg.attacker.uses_ram)
+    env = init_env(
+        run_attack_cfg.gym_env, atari_wrapper_args=atari_wrapper_args, is_ram_env=run_attack_cfg.attacker.uses_ram
+    )
 
     agent = init_agent(sb3_cfg=run_attack_cfg.policy, path_builder=policy_path_builder)
     if run_attack_cfg.policy.name.lower() == "dqn":

@@ -48,7 +48,7 @@ class EncObsRolloutHelper(BaseRolloutHelper):
             current_state = self.enc_obs_prediction_model(current_state, one_hot_action.float())
 
         return current_state
-    
+
     def get_action_sequence(self, idx: int) -> tuple[int, ...]:
         return self.action_enumeration[idx]
 
