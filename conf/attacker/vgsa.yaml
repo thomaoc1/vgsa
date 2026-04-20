@@ -1,8 +1,8 @@
 name: "vgsa"
 
 rollout_helper: 
-  action_enum_len: 2
+  action_enum_len: 1
   baseline_obs_dist: 2
  
 n_actions: "${gym_env.n_actions}"
-attack_threshold: 0.5
+attack_threshold: 0.55

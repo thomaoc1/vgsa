@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 
 import ale_py
-from attacks_on_drl.runner import AttackRunner
 import gymnasium as gym
 import hydra
 import torch
@@ -9,6 +8,7 @@ from attacks_on_drl.attacker import StrategicallyTimedAttacker
 from attacks_on_drl.attacker.common.base_attacker import BaseAttacker
 from attacks_on_drl.attacker.critical_point_attack import CriticalPointAttack
 from attacks_on_drl.attacker.critical_point_attack.divergence import AtariDivergenceFunction
+from attacks_on_drl.runner import AttackRunner
 from attacks_on_drl.victim.common.base_victim import BaseVictim
 from omegaconf import DictConfig
 
@@ -59,6 +59,10 @@ def init_vgsa(run_attack_cfg: RunAttackConfig, victim: BaseVictim, prediction_mo
         )
     else:
         obs_prediction_model = ObsPredictionModel(n_actions)
+        obs_prediction_model.load_state_dict(
+            torch.load(prediction_model_path_builder.prediction_model_weights, map_location="cpu")
+        )
+
         rollout_helper = ObsRolloutHelper(
             obs_prediction_model=obs_prediction_model,
             victim=victim,
@@ -66,7 +70,12 @@ def init_vgsa(run_attack_cfg: RunAttackConfig, victim: BaseVictim, prediction_mo
             action_enum_len=attacker_cfg.rollout_helper.action_enum_len,
             baseline_obs_dist=attacker_cfg.rollout_helper.baseline_obs_dist,
         )
-    return VGSAAttacker(victim=victim, rollout_helper=rollout_helper, attack_threshold=attacker_cfg.attack_threshold)
+    
+    return VGSAAttacker(
+        victim=victim,
+        rollout_helper=rollout_helper,
+        attack_threshold=attacker_cfg.attack_threshold,
+    )
 
 
 def init_cpa(
