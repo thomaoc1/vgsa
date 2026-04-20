@@ -1,0 +1,5 @@
+defaults:
+  - gym_env: pong
+  - policy: ppo
+  - attacker: vgsa
+  - _self_
