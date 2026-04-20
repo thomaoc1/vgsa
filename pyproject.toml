@@ -4,7 +4,9 @@ version = "0.1.0"
 description = "Value-Guided Strategic Attack (VGSA): An envrionment agnostic observation space attack against DRL trained policies."
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "attacks-on-drl>=0.2.2",
+]
 
 [dependency-groups]
 dev = [
