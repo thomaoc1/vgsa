@@ -1,0 +1,5 @@
+name: "VGSAAttacker"
+K: 2
+M: 3
+n_actions: "${env.n_actions}"
+attack_threshold: 0.5

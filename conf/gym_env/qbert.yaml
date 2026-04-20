@@ -1,0 +1,5 @@
+defaults:
+  - atari_base
+
+name: 'QbertNoFrameskip-v4'
+n_actions: 6

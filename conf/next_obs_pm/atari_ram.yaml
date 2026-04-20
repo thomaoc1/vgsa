@@ -1,0 +1,5 @@
+model_type: "RamNextStatePredictor"
+model_kwargs: {
+  state_dim: 128,
+  n_actions: "${env.n_actions}",
+}

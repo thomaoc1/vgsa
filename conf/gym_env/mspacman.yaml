@@ -1,0 +1,5 @@
+defaults:
+  - atari_base
+
+name: 'MsPacmanNoFrameskip-v4'
+n_actions: 9

@@ -1,0 +1,5 @@
+name: "CriticalPointAttacker"
+K: 2
+M: 2
+n_actions: "${env.n_actions}"
+attack_threshold: 9

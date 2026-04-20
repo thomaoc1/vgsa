@@ -1,0 +1,5 @@
+defaults:
+  - atari_base
+
+name: 'BreakoutNoFrameskip-v4'
+n_actions: 4

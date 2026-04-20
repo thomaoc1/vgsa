@@ -1,0 +1,6 @@
+name: "StrategicallyTimedAttacker"
+K: 1
+M: 1
+n_actions: "${env.n_actions}"
+attack_threshold: 0.5
+perturbation_type: "CW"
