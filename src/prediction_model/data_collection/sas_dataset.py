@@ -3,7 +3,7 @@ import torch
 from torch.utils.data import Dataset
 
 
-class StateActionStateDataset(Dataset):
+class TransitionDataset(Dataset):
     def __init__(self, n_actions: int, episodes: list | None = None, sample_map: list | None = None):
         assert (episodes and sample_map) or not (episodes or sample_map), "Both or neither must be provided (XOR)"
 
@@ -54,9 +54,9 @@ class StateActionStateDataset(Dataset):
 
         return current_state, actions, next_states
 
-    def subset(self, indices: list[int]) -> "StateActionStateDataset":
+    def subset(self, indices: list[int]) -> "TransitionDataset":
         subset_sample_map = [self.sample_map[i] for i in indices]
-        subset = StateActionStateDataset(self.n_actions, episodes=self.episodes, sample_map=subset_sample_map)
+        subset = TransitionDataset(self.n_actions, episodes=self.episodes, sample_map=subset_sample_map)
         subset.k = self.k
         return subset
 
@@ -75,4 +75,4 @@ class StateActionStateDataset(Dataset):
     @staticmethod
     def load(n_actions: int, path: str):
         data = torch.load(path, weights_only=True)
-        return StateActionStateDataset(n_actions, **data)
+        return TransitionDataset(n_actions, **data)

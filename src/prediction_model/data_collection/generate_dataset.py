@@ -21,7 +21,7 @@ from src.util.path_builder import DatasetPaths, PolicyPaths
 from src.util.sb3_env import StackedAtariRamVecWrapper, init_env
 from src.util.set_global_seed import set_global_seed
 
-from .sas_dataset import StateActionStateDataset
+from .sas_dataset import TransitionDataset
 
 gym.register_envs(ale_py)
 
@@ -112,7 +112,7 @@ def generate_dataset(
     agent,
     gen_data_cfg: GenDataConfig,
 ):
-    dataset = StateActionStateDataset(env.action_space.n)  # pyright: ignore[reportAttributeAccessIssue]
+    dataset = TransitionDataset(env.action_space.n)  # pyright: ignore[reportAttributeAccessIssue]
 
     frames_collected = 0
     episode_rewards = deque(maxlen=100)
