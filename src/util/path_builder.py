@@ -62,10 +62,6 @@ class PredictionModelPaths(ModelsPaths):
         filename = f"model_weights_agent_seed_{self.agent_seed}.pt"
         return os.path.join(self.prediction_model_ram_dir, filename)
 
-    @property
-    def ram_model(self):
-        return self.join("prediction_model", "prediction_model_ram.pt")
-
     def ram_model_weights(self):
         base = self.ram_prediction_model_weights
         base_no_ext = os.path.splitext(base)[0]
@@ -82,9 +78,6 @@ class PredictionModelPaths(ModelsPaths):
         base_no_ext = os.path.splitext(base)[0]
 
         suffix = ""
-
-        if self.run_name:
-            suffix += f"_{self.run_name}"
 
         if self.seed is not None:
             suffix += f"_seed_{self.seed}"
@@ -115,9 +108,6 @@ class PolicyPaths(ModelsPaths):
         base_no_ext = os.path.splitext(base)[0]
 
         suffix = ""
-
-        if self.run_name:
-            suffix += f"_{self.run_name}"
 
         if self.seed is not None:
             suffix += f"_seed_{self.seed}"
