@@ -6,7 +6,7 @@ from torch.utils.data import DataLoader
 from .common import PredictionModelTrainer
 
 
-class RAMStatePredictionModelTrainer(PredictionModelTrainer):
+class RAMPredictionModelTrainer(PredictionModelTrainer):
     def _iteration(
         self,
         loader: DataLoader,

@@ -7,7 +7,7 @@ from torch.utils.data import DataLoader
 from .common import PredictionModelTrainer
 
 
-class PolicyEncodingPredictorTrainer(PredictionModelTrainer):
+class PolicyEncodingPredictionModelTrainer(PredictionModelTrainer):
     def _run_epoch(self, loader: DataLoader, teacher_forcing_prob: float, optimiser: Optimizer | None = None):
         total_loss = 0
 
