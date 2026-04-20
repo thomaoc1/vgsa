@@ -1,0 +1,8 @@
+# @package _global_
+defaults:
+  - policy: dqn
+  - gym_env: pong
+  - _self_
+
+dataset_save_name: "train"
+n_frames: 500000
