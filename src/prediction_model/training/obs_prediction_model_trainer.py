@@ -1,5 +1,3 @@
-from typing import List, Optional, Tuple
-
 import torch
 import torch.nn.functional as F
 from torch.nn.utils import clip_grad_norm_
@@ -13,7 +11,6 @@ from .common import FrameCycler
 from .common.prediction_model_trainer import PredictionModelTrainer
 
 
-
 class ObsPredictionModelTrainer(PredictionModelTrainer):
     def __init__(
         self,
@@ -25,14 +22,11 @@ class ObsPredictionModelTrainer(PredictionModelTrainer):
         super().__init__(model, num_actions, prediction_model_path_builder, teacher_forcing)
         self._frame_cycler = FrameCycler()
 
-    def _run_epoch(
-        self, loader: DataLoader, teacher_forcing_prob: float, optimiser: Optional[Optimizer] = None
-    ) -> float:
+    def _run_epoch(self, loader: DataLoader, teacher_forcing_prob: float, optimiser: Optimizer | None = None) -> float:
         total_epoch_loss = 0.0
         for states, actions, next_states in loader:
             _, K = actions.shape
             k_losses = torch.zeros(K, device=self.device)
-            k_loss_components = [0] * K
 
             states, actions, next_states = (
                 states.to(self.device) / 255.0,
@@ -53,8 +47,8 @@ class ObsPredictionModelTrainer(PredictionModelTrainer):
                 )
                 predicted_next_state = self.model(states, current_one_hot_action).unsqueeze(1)
                 recon_mse = F.mse_loss(predicted_next_state, target_next_state, reduction="none")
-                recon_mse = recon_mse.view(target_next_state.size(0), -1).sum(dim=1).mean()
-                k_loss_components[predictive_step] = recon_mse.item()
+                loss = recon_mse.view(target_next_state.size(0), -1).sum(dim=1).mean()
+                k_losses[predictive_step] = loss.item()
 
                 if not optimiser or torch.rand(1).item() > teacher_forcing_prob:
                     states = predicted_next_state
@@ -67,16 +61,13 @@ class ObsPredictionModelTrainer(PredictionModelTrainer):
                 clip_grad_norm_(self.model.parameters(), max_norm=1)
                 optimiser.step()
 
-            total_epoch_loss += sum(k_loss_components) / K
-            
+            total_epoch_loss += sum(k_losses) / K
+
         return total_epoch_loss / len(loader)
 
     def train(
         self, train_loader: DataLoader, val_loader: DataLoader, epochs: int, lr: float = 1e-4
-    ) -> Tuple[List, List]:
-        """
-        Main function for training and evaluating the model.
-        """
+    ) -> tuple[list, list]:
         optimiser = Adam(self.model.parameters(), lr=lr)
         self.epochs = epochs
 
