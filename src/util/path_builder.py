@@ -37,6 +37,7 @@ class PredictionModelPaths(ModelsPaths):
         seed: int | None = None,
         run_name: str | None = None,
     ):
+        seed = seed if seed else 42
         super().__init__(algo, env, seed, run_name)
         self.agent_seed = agent_seed
         self.encoded = encoded
@@ -54,12 +55,12 @@ class PredictionModelPaths(ModelsPaths):
 
     @property
     def prediction_model_weights(self):
-        filename = f"model_weights_agent_seed_{self.agent_seed}.pt"
+        filename = f"model_weights_agent_seed_{self.agent_seed}_seed_{self.seed}.pt"
         return os.path.join(self.prediction_model_dir, filename)
 
     @property
     def ram_prediction_model_weights(self):
-        filename = f"model_weights_agent_seed_{self.agent_seed}.pt"
+        filename = f"model_weights_agent_seed_{self.agent_seed}_seed_{self.seed}.pt"
         return os.path.join(self.prediction_model_ram_dir, filename)
 
     def ram_model_weights(self):

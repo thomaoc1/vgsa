@@ -15,6 +15,10 @@ class VGSAAttacker(CriticalPointAttack):
         attack_threshold: float,
         cw_kwargs: dict | None = None,
     ) -> None:
+        # super().__init__(
+        #     victim=victim,
+        #     rollout_helper=rollout_helper
+        # )
         self.rollout_helper = rollout_helper
         self.attack_threshold = attack_threshold
         wrapped_victim = VictimModuleWrapper(self.victim)

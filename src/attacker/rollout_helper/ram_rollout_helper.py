@@ -4,6 +4,7 @@ from collections import deque
 import torch
 import torch.nn.functional as F
 from attacks_on_drl.victim.common.base_victim import BaseVictim
+import numpy as np
 
 from src.attacker.rollout_helper.common.base_rollout_helper import BaseRolloutHelper
 from src.prediction_model.model.obs_prediction_model import ObsPredictionModel
@@ -20,19 +21,20 @@ class RamRolloutHelper(BaseRolloutHelper):
         victim: BaseVictim,
         n_actions: int,
         action_enum_len: int,
-        baseline_obs_len: int,
+        baseline_obs_dist: int,
     ):
         super().__init__(
             victim=victim,
             n_actions=n_actions,
             action_enum_len=action_enum_len,
-            baseline_obs_len=baseline_obs_len,
+            baseline_obs_len=baseline_obs_dist,
         )
-        assert baseline_obs_len == action_enum_len, "Baseline len greater than action enum len is not implemented."  
+        assert baseline_obs_dist == action_enum_len, "Baseline len greater than action enum len is not implemented."  
         self.env = env
         self.obs_prediction_model = obs_prediction_model
         self.ram_prediction_model = ram_prediction_model
 
+    @torch.no_grad()
     def _compute_agent_trajectory(self, ram_initial_state: torch.Tensor, agent_initial_state: torch.Tensor, steps: int):
         current_ram_state = ram_initial_state.float()
         current_agent_state = agent_initial_state
@@ -43,12 +45,12 @@ class RamRolloutHelper(BaseRolloutHelper):
 
         hidden = None
         for step in range(steps):
-            agent_action = self.victim.choose_action(current_agent_state.numpy(), deterministic=True)
+            agent_action = self.victim.choose_action(current_agent_state, deterministic=True)
             agent_action = torch.from_numpy(agent_action)
             one_hot_action = F.one_hot(agent_action.long(), num_classes=self.n_actions).float()
 
             predicted_next_ram_state, hidden = self.ram_prediction_model(
-                current_ram_state / 255.0, one_hot_action.unsqueeze(0), hidden
+                current_ram_state / 255.0, one_hot_action, hidden
             )
             current_ram_state = predicted_next_ram_state.argmax(dim=-1).float().unsqueeze(1)
             predicted_ram_state_queue.append(current_ram_state.squeeze(0))
@@ -63,9 +65,12 @@ class RamRolloutHelper(BaseRolloutHelper):
     def get_action_sequence(self, idx: int) -> tuple[int, ...]:
         return self.action_enumeration[idx]
 
-    def collect_baseline_observation(self, obs: torch.Tensor):
+    def collect_baseline_observation(self, obs: torch.Tensor | np.ndarray):
         ram_state = torch.from_numpy(self.env.get_stacked_ram_obs())
-        return self._compute_agent_trajectory(ram_state, obs, self.baseline_obs_dist)
+        if isinstance(obs, np.ndarray):
+            obs = torch.from_numpy(obs)
+        baseline_ram_state = self._compute_agent_trajectory(ram_state, obs, self.baseline_obs_dist)
+        return baseline_ram_state[:, -1]
 
     def collect_all_rollout_observations(self, obs: torch.Tensor):
         current_ram_state = torch.from_numpy(self.env.get_stacked_ram_obs())
@@ -89,4 +94,4 @@ class RamRolloutHelper(BaseRolloutHelper):
             )
             current_ram_state = predicted_next_ram_state.unsqueeze(dim=1).argmax(dim=-1)
 
-        return current_ram_state
+        return current_ram_state[:, -1]

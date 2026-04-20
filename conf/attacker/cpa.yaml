@@ -1,5 +1,9 @@
-name: "CriticalPointAttacker"
-K: 2
-M: 2
-n_actions: "${env.n_actions}"
+name: "cpa"
+
+rollout_helper: 
+  action_enum_len: 2
+  baseline_obs_dist: 2
+  
+n_actions: "${gym_env.n_actions}"
 attack_threshold: 9
+uses_ram: True

@@ -13,13 +13,13 @@ class ObsRolloutHelper(BaseRolloutHelper):
         victim: BaseVictim,
         n_actions: int,
         action_enum_len: int,
-        baseline_obs_len: int,
+        baseline_obs_dist: int,
     ) -> None:
         super().__init__(
             victim=victim,
             n_actions=n_actions,
             action_enum_len=action_enum_len,
-            baseline_obs_len=baseline_obs_len,
+            baseline_obs_len=baseline_obs_dist,
         )
         self.obs_prediction_model = obs_prediction_model
 

@@ -22,13 +22,13 @@ class EncObsRolloutHelper(BaseRolloutHelper):
         victim: BaseVictim,
         n_actions: int,
         action_enum_len: int,
-        baseline_obs_len: int,
+        baseline_obs_dist: int,
     ) -> None:
         super().__init__(
             victim=victim,
             n_actions=n_actions,
             action_enum_len=action_enum_len,
-            baseline_obs_len=baseline_obs_len,
+            baseline_obs_len=baseline_obs_dist,
         )
         self.enc_obs_prediction_model = enc_obs_prediction_model
         self.victim = cast(EncBaseVictim, self.victim)
@@ -48,11 +48,14 @@ class EncObsRolloutHelper(BaseRolloutHelper):
             current_state = self.enc_obs_prediction_model(current_state, one_hot_action.float())
 
         return current_state
+    
+    def get_action_sequence(self, idx: int) -> tuple[int, ...]:
+        return self.action_enumeration[idx]
 
-    def compute_baseline_rollout(self, initial_state: torch.Tensor):
+    def collect_baseline_observation(self, initial_state: torch.Tensor):
         return self._compute_agent_trajectory(initial_state, self.baseline_obs_dist)
 
-    def compute_full_rollout(self, initial_state: torch.Tensor):
+    def collect_all_rollout_observations(self, initial_state: torch.Tensor):
         current_actions = self.onehot_action.float()
         current_states = self.victim.enc_obs(initial_state)
 

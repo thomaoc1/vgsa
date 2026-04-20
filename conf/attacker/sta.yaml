@@ -1,4 +1,4 @@
-name: "StrategicallyTimedAttacker"
+name: "sta"
 K: 1
 M: 1
 n_actions: "${env.n_actions}"
