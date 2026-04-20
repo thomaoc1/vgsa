@@ -1,4 +1,4 @@
-model_type: "ImageNextStatePredictor"
+model_type: "ObservationPredictionModel"
 model_kwargs: {
   n_actions: "${env.n_actions}",
   encoding_size: 1024,

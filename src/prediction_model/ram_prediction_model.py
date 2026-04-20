@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 
 
-class RamNextStatePredictor(nn.Module):
+class RamPredictionModel(nn.Module):
     def __init__(self, state_dim, n_actions):
         super().__init__()
         self._n_values = 256
