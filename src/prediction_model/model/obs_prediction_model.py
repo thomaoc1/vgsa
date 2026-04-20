@@ -60,7 +60,7 @@ class Decoder(nn.Module):
         return x.squeeze(dim=1)
 
 
-class ObservationPredictionModel(nn.Module):
+class ObsPredictionModel(nn.Module):
     """
     Next state predictor as per https://arxiv.org/pdf/1507.08750
 
