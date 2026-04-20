@@ -1,4 +1,4 @@
 from .transition_dataset import TransitionDataset
-from .gen_dataset import generate_dataset
+from .collect import collect_rollouts
 
-__all__ = ["TransitionDataset", "generate_dataset"]
+__all__ = ["TransitionDataset", "collect_rollouts"]

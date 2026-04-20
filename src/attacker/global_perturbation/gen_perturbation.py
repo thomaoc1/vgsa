@@ -25,7 +25,7 @@ class GlobalPerturbationGeneratorConfig:
     device: str = "cuda" if torch.cuda.is_available() else "cpu"
 
 
-@hydra.main(version_base=None, config_path=CONFIG_PATH, config_name="generate_global_perturbation")
+@hydra.main(version_base=None, config_path=CONFIG_PATH, config_name="gen_perturbation")
 def main(cfg: DictConfig):
     gpg_config = GlobalPerturbationGeneratorConfig(**cfg)  # pyright: ignore[reportCallIssue]
     gpg_config.env = EnvConfig(**cfg.env)

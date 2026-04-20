@@ -107,7 +107,7 @@ def run_episode(
     return states, actions, ep_reward, frames_this_episode
 
 
-def generate_dataset(
+def collect_rollouts(
     env: VecEnv,
     agent,
     gen_data_cfg: GenDataConfig,
@@ -138,7 +138,7 @@ def generate_dataset(
     return dataset
 
 
-@hydra.main(version_base=None, config_path=CONFIG_PATH, config_name="generate_data")
+@hydra.main(version_base=None, config_path=CONFIG_PATH, config_name="collect_rollouts")
 def main(cfg: DictConfig):
     gen_data_cfg = GenDataConfig(**cfg)  # pyright: ignore[reportCallIssue]
     gen_data_cfg.gym_env = EnvConfig(**cfg.gym_env)
@@ -175,7 +175,7 @@ def main(cfg: DictConfig):
         seed=SEED,
     )
 
-    dataset = generate_dataset(env, agent, gen_data_cfg)
+    dataset = collect_rollouts(env, agent, gen_data_cfg)
     print(f"Saving to {dataset_path_builder.train_file}")
 
     if gen_data_cfg.is_ram_env:
