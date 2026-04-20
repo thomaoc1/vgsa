@@ -8,7 +8,7 @@ from .common import PredictionModelTrainer
 
 
 class PolicyEncodingPredictorTrainer(PredictionModelTrainer):
-    def _run_epoch(self, loader: DataLoader, teacher_forcing_prob: float = 0, optimiser: Optimizer | None = None):
+    def _run_epoch(self, loader: DataLoader, teacher_forcing_prob: float, optimiser: Optimizer | None = None):
         total_loss = 0
 
         for encoded_state, actions, encoded_next_states in loader:
@@ -64,7 +64,7 @@ class PolicyEncodingPredictorTrainer(PredictionModelTrainer):
 
             self.model.eval()
             with torch.no_grad():
-                validation_loss = self._run_epoch(val_loader)
+                validation_loss = self._run_epoch(val_loader, teacher_forcing_prob=0)
 
             self.validation_losses.append(validation_loss)
             scheduler.step(validation_loss)

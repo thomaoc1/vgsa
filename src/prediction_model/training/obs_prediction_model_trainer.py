@@ -82,7 +82,7 @@ class ObsPredictionModelTrainer(PredictionModelTrainer):
 
             self.model.eval()
             with torch.no_grad():
-                validation_loss = self._run_epoch(val_loader, teacher_forcing_prob)
+                validation_loss = self._run_epoch(val_loader, teacher_forcing_prob=0)
 
             self.validation_losses.append(validation_loss)
             lr_scheduler.step(validation_loss)
