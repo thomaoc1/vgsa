@@ -8,7 +8,7 @@ from omegaconf import DictConfig
 from torch.utils.data import DataLoader, random_split
 
 from src.attacker.global_perturbation.obs_dataset import ObservationDataset
-from src.prediction_model.data_collection.sas_dataset import TransitionDataset
+from src.prediction_model.rollout_collection.transition_dataset import TransitionDataset
 from src.util.agent import init_agent
 from src.util.config.definitions import EnvConfig, PolicyConfig
 from src.util.config.paths import CONFIG_PATH

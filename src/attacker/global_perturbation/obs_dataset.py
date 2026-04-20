@@ -2,7 +2,7 @@ from typing import Optional
 from torch.utils.data import Dataset
 import random
 
-from src.prediction_model.data_collection.sas_dataset import TransitionDataset
+from src.prediction_model.rollout_collection.transition_dataset import TransitionDataset
 
 
 class ObservationDataset(Dataset):

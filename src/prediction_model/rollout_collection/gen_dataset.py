@@ -21,7 +21,7 @@ from src.util.path_builder import DatasetPaths, PolicyPaths
 from src.util.sb3_env import StackedAtariRamVecWrapper, init_env
 from src.util.set_global_seed import set_global_seed
 
-from .sas_dataset import TransitionDataset
+from .transition_dataset import TransitionDataset
 
 gym.register_envs(ale_py)
 
