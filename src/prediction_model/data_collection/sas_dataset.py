@@ -6,7 +6,7 @@ from torch.utils.data import Dataset
 class StateActionStateDataset(Dataset):
     def __init__(self, n_actions: int, episodes: list | None = None, sample_map: list | None = None):
         assert (episodes and sample_map) or not (episodes or sample_map), "Both or neither must be provided (XOR)"
-        
+
         self.sample_map = [] if not sample_map else sample_map
         self.episodes = [] if not episodes else episodes
 

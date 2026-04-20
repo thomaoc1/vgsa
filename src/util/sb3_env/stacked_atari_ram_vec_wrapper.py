@@ -11,6 +11,7 @@ class StackedAtariRamVecWrapper(VecEnvWrapper):
     A VecEnv wrapper that stacks Atari RAM observations per environment.
     It preserves a deque of last N RAM states for each parallel env.
     """
+
     def __init__(self, venv, ram_annotations: Optional[dict] = None, stack_size: int = 4):
         super().__init__(venv)
         self.num_stack = stack_size

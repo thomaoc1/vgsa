@@ -55,7 +55,7 @@ def check_obs(observation):
     if observation.dtype in [np.float32, np.float64] and observation.max() <= 1.0:
         observation = (observation * 255).round().astype(np.uint8)
     return observation
-    
+
 
 @torch.no_grad()
 def run_episode(
@@ -100,7 +100,7 @@ def run_episode(
 
         frames_this_episode += 1
         pbar.update(1)
-        
+
         observation, reward, is_done, _ = env.step(action)
         ep_reward += reward
 

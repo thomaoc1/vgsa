@@ -7,7 +7,11 @@ from .stacked_atari_ram_vec_wrapper import StackedAtariRamVecWrapper
 
 
 def init_env(
-    env_config: EnvConfig, seed: int | None = None, scale_obs: bool = True, atari_wrapper_args: dict | None = None, is_ram_env: bool = False,
+    env_config: EnvConfig,
+    seed: int | None = None,
+    scale_obs: bool = True,
+    atari_wrapper_args: dict | None = None,
+    is_ram_env: bool = False,
 ) -> VecEnv:
     if not atari_wrapper_args:
         atari_wrapper_args = dict()

@@ -4,7 +4,7 @@ import torch
 
 def get_memory_usage():
     process = psutil.Process()
-    mem_info = process.memory_info().rss / 1024**3  
+    mem_info = process.memory_info().rss / 1024**3
     gpu_mem = torch.cuda.memory_allocated() / 1024**3
     gpu_reserved = torch.cuda.memory_reserved() / 1024**3
 

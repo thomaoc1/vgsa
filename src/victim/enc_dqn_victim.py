@@ -1,5 +1,3 @@
-
-
 from attacks_on_drl.victim.dqn_victim import DQNVictim
 import torch
 
@@ -17,7 +15,7 @@ class EncDQNVictim(DQNVictim, EncBaseVictim):
     def eval_enc_obs(self, enc_obs: torch.Tensor):
         q_values = self.model.q_net.q_net(enc_obs)
         return q_values.max(dim=-1).values.unsqueeze(1)
-    
+
     def get_action_logits_from_encoded(self, enc_obs: torch.Tensor) -> torch.Tensor:
         with torch.no_grad():
             q_values = self.model.q_net.q_net(enc_obs)

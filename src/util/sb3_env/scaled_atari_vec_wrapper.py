@@ -13,7 +13,7 @@ class ScaledAtariVecWrapper(VecEnvWrapper):
         if isinstance(obs, np.ndarray):
             return obs.astype(np.float32) / 255.0
         raise ValueError("Only np.ndarray observation type supported.")
-            
+
     def step_wait(self):
         obs, rewards, dones, infos = self.venv.step_wait()
         if isinstance(obs, np.ndarray):

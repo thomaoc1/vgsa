@@ -65,16 +65,16 @@ class RAMStatePredictionModelTrainer(PredictionModelTrainer):
         for epoch in range(epochs):
             teacher_forcing_prob = self.teacher_forcing_schedule(epoch, total_epochs=epochs)
             self.model.train()
-            avg_train_epoch_loss = self._iteration(train_loader, teacher_forcing_prob, optimizer) 
-            self.train_losses.append(avg_train_epoch_loss)
+            train_loss = self._iteration(train_loader, teacher_forcing_prob, optimizer)
+            self.train_losses.append(train_loss)
 
             self.model.eval()
-            avg_val_epoch_loss = self._iteration(val_loader, teacher_forcing_prob=0)
-            self.validation_losses.append(avg_val_epoch_loss)
+            val_loss = self._iteration(val_loader, teacher_forcing_prob=0)
+            self.validation_losses.append(val_loss)
 
             print(
-                f"Epoch {epoch}: Train Loss = {avg_train_epoch_loss:.4f}, "
-                f"Val Loss = {avg_val_epoch_loss:.4f},"
+                f"Epoch {epoch}: Train Loss = {train_loss:.4f}, "
+                f"Val Loss = {val_loss:.4f},"
                 f" Teacher forcing prob = {teacher_forcing_prob:.4f}"
             )
             self.save()
