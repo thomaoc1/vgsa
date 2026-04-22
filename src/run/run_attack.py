@@ -17,6 +17,7 @@ from src.victim.enc_actor_critic_victim import EncActorCriticVictim
 from src.victim.enc_dqn_victim import EncDQNVictim
 
 gym.register_envs(ale_py)
+SEED = 101
 
 
 @dataclass
@@ -31,6 +32,7 @@ class RunAttackConfig:
 
 @hydra.main(version_base=None, config_path=CONFIG_PATH, config_name="run_attack")
 def main(cfg: DictConfig):
+    set_global_seed(101)
     run_attack_cfg = RunAttackConfig(**cfg)  # pyright: ignore[reportCallIssue]
     run_attack_cfg.gym_env = EnvConfig(**cfg.gym_env)
     run_attack_cfg.policy = PolicyConfig(**cfg.policy)
@@ -56,7 +58,10 @@ def main(cfg: DictConfig):
         "clip_reward": False,
     }
     env = init_env(
-        run_attack_cfg.gym_env, atari_wrapper_args=atari_wrapper_args, is_ram_env=run_attack_cfg.attacker.uses_ram
+        run_attack_cfg.gym_env,
+        atari_wrapper_args=atari_wrapper_args,
+        is_ram_env=run_attack_cfg.attacker.uses_ram,
+        seed=SEED,
     )
 
     agent = init_agent(sb3_cfg=run_attack_cfg.policy, path_builder=policy_path_builder)
@@ -68,9 +73,9 @@ def main(cfg: DictConfig):
     attacker = init_attacker(
         attacker_cfg=run_attack_cfg.attacker,
         victim=victim,
-        env=env, 
+        env=env,
         env_n_actions=run_attack_cfg.gym_env.n_actions,
-        prediction_model_path_builder=prediction_model_path_builder
+        prediction_model_path_builder=prediction_model_path_builder,
     )
 
     # Run Attack ehre
