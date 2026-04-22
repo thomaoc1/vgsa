@@ -5,4 +5,4 @@ rollout_helper:
   baseline_obs_dist: 1
  
 n_actions: "${gym_env.n_actions}"
-attack_threshold: 10.0
+attack_threshold: 1.0

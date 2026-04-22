@@ -19,7 +19,7 @@ class VGSAAttacker(BaseAttacker):
         is_encoded: bool = False,
     ) -> None:
         super().__init__(victim=victim)
-        
+
         self.rollout_helper = rollout_helper
         self.attack_threshold = attack_threshold
         self.is_encoded = is_encoded
@@ -33,7 +33,7 @@ class VGSAAttacker(BaseAttacker):
 
         self.current_attack_action_seq = None
         self.current_attack_action_seq_idx = 0
-    
+
     def _attack(self, observation: VecEnvObs) -> VecEnvObs:
         assert self.current_attack_action_seq is not None, "Current action sequence is None."
 
@@ -55,14 +55,14 @@ class VGSAAttacker(BaseAttacker):
         with torch.no_grad():
             baseline_obs = self.rollout_helper.collect_baseline_observation(observation)
             all_final_obs = self.rollout_helper.collect_all_rollout_observations(observation)
-            
+
             if not self.is_encoded:
                 baseline_value = self.victim.eval_state(baseline_obs)
                 all_final_obs_values = self.victim.eval_state(all_final_obs)
             elif self.is_encoded and isinstance(self.victim, EncBaseVictim):
                 baseline_value = self.victim.eval_enc_obs(baseline_obs)
                 all_final_obs_values = self.victim.eval_enc_obs(all_final_obs)
-            
+
             best_attack_value, best_attack_value_idx = torch.min(
                 all_final_obs_values,
                 dim=0,

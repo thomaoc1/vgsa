@@ -2,7 +2,6 @@ import torch
 import numpy as np
 import torch.nn.functional as F
 from attacks_on_drl.victim.common import BaseVictim
-import matplotlib.pyplot as plt
 
 from src.attacker.rollout_helper.common.base_rollout_helper import BaseRolloutHelper
 from src.prediction_model.model.obs_prediction_model import ObsPredictionModel
@@ -51,12 +50,12 @@ class ObsRolloutHelper(BaseRolloutHelper):
 
     @torch.no_grad()
     def collect_all_rollout_observations(self, obs: torch.Tensor | np.ndarray):
-        
+
         current_actions = self.onehot_action.float()
-        
+
         if isinstance(obs, np.ndarray):
             obs = torch.from_numpy(obs)
-            
+
         current_states = obs
 
         for step in range(self.action_enum_len):
@@ -65,7 +64,7 @@ class ObsRolloutHelper(BaseRolloutHelper):
 
             if step > 0:
                 current_actions = current_actions.repeat(self.n_actions, 1)
-                
+
             predicted_next_states = self.obs_prediction_model(current_states, current_actions)
             current_states = self.frame_cycler.cycle_frames(predicted_next_states)
 

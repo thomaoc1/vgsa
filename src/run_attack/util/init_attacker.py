@@ -69,7 +69,7 @@ def init_cpa(
     env_name: str | None = env.get_attr("spec")[0].id
     if not env_name:
         raise ValueError("Could not get environment name from spec.id")
-        
+
     obs_prediction_model = ObsPredictionModel(n_actions)
     obs_prediction_model.load_state_dict(
         torch.load(prediction_model_path_builder.prediction_model_weights, map_location="cpu")
@@ -125,7 +125,7 @@ def init_attacker(
             )
         else:
             raise ValueError("For CPA, environment must be wrapped in StackedAtariRamVecWrapper.")
-            
+
     elif attacker_cfg.name.lower() == "sta":
         attacker = StrategicallyTimedAttacker(victim=victim, attack_threshold=attacker_cfg.attack_threshold)
     else:

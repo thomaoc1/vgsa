@@ -48,7 +48,7 @@ sdist = { url = "https://files.pythonhosted.org/packages/3e/38/7859ff46355f76f8d
 
 [[package]]
 name = "attacks-on-drl"
-version = "0.2.4"
+version = "0.2.5"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "ale-py" },
@@ -56,9 +56,9 @@ dependencies = [
     { name = "stable-baselines3", extra = ["extra"] },
     { name = "torchattacks" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f6/aa/68a9528d91ee715068abc97179db33dadc0590dea4ec9025d145b36b2c7e/attacks_on_drl-0.2.4.tar.gz", hash = "sha256:668b6ac07c3bab23d3251570f8746da8f358078351deefa5a6df3aa67647898a", size = 10509, upload-time = "2026-04-20T07:59:01.999Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/f5/1d/449b1b545c9775eaf130a39dfc9171468ce757d42ffbb4dc66321dba461b/attacks_on_drl-0.2.5.tar.gz", hash = "sha256:b1fcb22ef81e393f132b14446c46bb2fc67eff060581c45ecc1999546e206e10", size = 10495, upload-time = "2026-04-22T20:52:05.928Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/91/89/f14b042dad82eb917efdaed0e4a45c0faaa62b4ff7a0ed2d5c5a1d0c2237/attacks_on_drl-0.2.4-py3-none-any.whl", hash = "sha256:f40c580ef9c447b7eed5bf4ca403cdec0d3a9b172c35533dd3d9894ff056526c", size = 16749, upload-time = "2026-04-20T07:59:00.92Z" },
+    { url = "https://files.pythonhosted.org/packages/fa/f2/4e48a8a03d828c142b05e700a04227136e24c20b626aeb64e3391bad634c/attacks_on_drl-0.2.5-py3-none-any.whl", hash = "sha256:4b5c0d3fcd0c60f5170392654e79bc473a38a5c860fbbf30aef899970b570f04", size = 16683, upload-time = "2026-04-22T20:52:04.606Z" },
 ]
 
 [[package]]
@@ -1616,7 +1616,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "attacks-on-drl", specifier = ">=0.2.4" },
+    { name = "attacks-on-drl", specifier = ">=0.2.5" },
     { name = "hydra-core", specifier = ">=1.3.2" },
     { name = "matplotlib", specifier = ">=3.10.8" },
 ]
