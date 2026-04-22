@@ -24,6 +24,7 @@ from src.util.config.definitions import AttackerConfig, EnvConfig, PolicyConfig
 from src.util.config.paths import CONFIG_PATH
 from src.util.path_builder import PolicyPaths, PredictionModelPaths
 from src.util.sb3_env import StackedAtariRamVecWrapper, init_env
+from src.util.set_global_seed import set_global_seed
 from src.victim.enc_actor_critic_victim import EncActorCriticVictim
 from src.victim.enc_dqn_victim import EncDQNVictim
 
@@ -75,6 +76,7 @@ def init_vgsa(run_attack_cfg: RunAttackConfig, victim: BaseVictim, prediction_mo
         victim=victim,
         rollout_helper=rollout_helper,
         attack_threshold=attacker_cfg.attack_threshold,
+        is_encoded=attacker_cfg.is_encoded,
     )
 
 
@@ -123,6 +125,8 @@ def init_attacker(
     prediction_model_path_builder: PredictionModelPaths,
     victim: BaseVictim,
 ) -> BaseAttacker:
+    set_global_seed(101)
+    
     chosen_attacker = run_attack_cfg.attacker.name
     if chosen_attacker.lower() == "vgsa":
         attacker = init_vgsa(

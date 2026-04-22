@@ -1,37 +1,28 @@
+from attacks_on_drl.runner.attack_runner import BaseAttacker
 import torch
 import torchattacks
 from attacks_on_drl.attacker.common import VictimModuleWrapper
-from attacks_on_drl.attacker.critical_point_attack.critical_point_attack import CriticalPointAttack
 from attacks_on_drl.attacker.critical_point_attack.rollout_helper import RolloutHelper
 from attacks_on_drl.victim.common import BaseVictim
 from stable_baselines3.common.vec_env.base_vec_env import VecEnvObs
-import matplotlib.pyplot as plt
 
 from src.victim.common.enc_base_victim import EncBaseVictim
 
 
-class VGSAAttacker(CriticalPointAttack):
+class VGSAAttacker(BaseAttacker):
     def __init__(
         self,
         victim: BaseVictim,
         rollout_helper: RolloutHelper,
         attack_threshold: float,
         cw_kwargs: dict | None = None,
+        is_encoded: bool = False,
     ) -> None:
-        if isinstance(victim, EncBaseVictim):
-            divergence_function = victim.eval_enc_obs
-        else: 
-            divergence_function = victim.eval_state
-            
-        super().__init__(
-            victim=victim,
-            rollout_helper=rollout_helper,
-            divergence_function=divergence_function,
-            attack_threshold=attack_threshold
-        )
+        super().__init__(victim=victim)
         
         self.rollout_helper = rollout_helper
         self.attack_threshold = attack_threshold
+        self.is_encoded = is_encoded
         wrapped_victim = VictimModuleWrapper(self.victim)
 
         if not cw_kwargs:
@@ -42,6 +33,20 @@ class VGSAAttacker(CriticalPointAttack):
 
         self.current_attack_action_seq = None
         self.current_attack_action_seq_idx = 0
+    
+    def _attack(self, observation: VecEnvObs) -> VecEnvObs:
+        assert self.current_attack_action_seq is not None, "Current action sequence is None."
+
+        target_action = torch.tensor(self.current_attack_action_seq[self.current_attack_action_seq_idx]).unsqueeze(0)
+        tens_observation = torch.from_numpy(observation)
+        adversarial_observation = self._perturbation_method(tens_observation, target_action).numpy()
+
+        self.current_attack_action_seq_idx += 1
+        if self.current_attack_action_seq_idx == len(self.current_attack_action_seq):
+            self.current_attack_action_seq = None
+            self.current_attack_action_seq_idx = 0
+
+        return adversarial_observation
 
     def step(self, observation: VecEnvObs) -> tuple[VecEnvObs, bool]:
         if self.current_attack_action_seq is not None:
@@ -49,11 +54,17 @@ class VGSAAttacker(CriticalPointAttack):
 
         with torch.no_grad():
             baseline_obs = self.rollout_helper.collect_baseline_observation(observation)
-            baseline_value = self.victim.eval_state(baseline_obs)
-    
-            all_final_observations = self.rollout_helper.collect_all_rollout_observations(observation)
+            all_final_obs = self.rollout_helper.collect_all_rollout_observations(observation)
+            
+            if not self.is_encoded:
+                baseline_value = self.victim.eval_state(baseline_obs)
+                all_final_obs_values = self.victim.eval_state(all_final_obs)
+            elif self.is_encoded and isinstance(self.victim, EncBaseVictim):
+                baseline_value = self.victim.eval_enc_obs(baseline_obs)
+                all_final_obs_values = self.victim.eval_enc_obs(all_final_obs)
+            
             best_attack_value, best_attack_value_idx = torch.min(
-                self.victim.eval_state(all_final_observations),
+                all_final_obs_values,
                 dim=0,
             )
 
