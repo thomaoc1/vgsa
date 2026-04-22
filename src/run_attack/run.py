@@ -6,7 +6,7 @@ import hydra
 from attacks_on_drl.runner import AttackRunner
 from omegaconf import DictConfig
 
-from src.run.util import init_attacker
+from src.run_attack.util import init_attacker
 from src.util.agent import init_agent
 from src.util.config.definitions import AttackerConfig, EnvConfig, PolicyConfig
 from src.util.config.paths import CONFIG_PATH
@@ -25,7 +25,6 @@ class RunAttackConfig:
     gym_env: EnvConfig
     policy: PolicyConfig
     attacker: AttackerConfig
-    debug_mode: bool = False
     episode_max_frames: int | float = float("+inf")
     n_episodes: int = 100
 
@@ -78,7 +77,6 @@ def main(cfg: DictConfig):
         prediction_model_path_builder=prediction_model_path_builder,
     )
 
-    # Run Attack ehre
     runner = AttackRunner(env, attacker, victim)
     runner.run(100)
 
