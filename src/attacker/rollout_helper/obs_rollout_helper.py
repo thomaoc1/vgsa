@@ -1,5 +1,5 @@
-import torch
 import numpy as np
+import torch
 import torch.nn.functional as F
 from attacks_on_drl.victim.common import BaseVictim
 
@@ -30,12 +30,9 @@ class ObsRolloutHelper(BaseRolloutHelper):
 
         for _ in range(steps):
             agent_action = torch.from_numpy(self.victim.choose_action(current_state, deterministic=True))
-            one_hot_action = F.one_hot(agent_action.long(), num_classes=self.n_actions)
-            if one_hot_action.dim() < 2:
-                one_hot_action = one_hot_action.unsqueeze(0)
-
+            one_hot_action = self.onehot_action[agent_action].unsqueeze(0)
             self.frame_cycler.save_current_state(current_state)
-            predicted_next_pm_states = self.obs_prediction_model(current_state, one_hot_action.float())
+            predicted_next_pm_states = self.obs_prediction_model(current_state, one_hot_action)
             current_state = self.frame_cycler.cycle_frames(predicted_next_pm_states)
 
         return current_state
@@ -50,13 +47,11 @@ class ObsRolloutHelper(BaseRolloutHelper):
 
     @torch.no_grad()
     def collect_all_rollout_observations(self, obs: torch.Tensor | np.ndarray):
-
-        current_actions = self.onehot_action.float()
-
         if isinstance(obs, np.ndarray):
             obs = torch.from_numpy(obs)
 
         current_states = obs
+        current_actions = self.onehot_action
 
         for step in range(self.action_enum_len):
             current_states = current_states.repeat_interleave(self.n_actions, dim=0)
