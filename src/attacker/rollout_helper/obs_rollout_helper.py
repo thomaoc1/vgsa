@@ -1,6 +1,6 @@
+from typing import override
 import numpy as np
 import torch
-import torch.nn.functional as F
 from attacks_on_drl.victim.common import BaseVictim
 
 from src.attacker.rollout_helper.common.base_rollout_helper import BaseRolloutHelper
@@ -40,13 +40,15 @@ class ObsRolloutHelper(BaseRolloutHelper):
     def get_action_sequence(self, idx: int) -> tuple[int, ...]:
         return self.action_enumeration[idx]
 
-    def collect_baseline_observation(self, obs: torch.Tensor | np.ndarray):
+    @override
+    def collect_baseline_obs(self, obs: torch.Tensor | np.ndarray):
         if isinstance(obs, np.ndarray):
             obs = torch.from_numpy(obs)
         return self._compute_agent_trajectory(obs, self.baseline_obs_dist)
 
+    @override
     @torch.no_grad()
-    def collect_all_rollout_observations(self, obs: torch.Tensor | np.ndarray):
+    def collect_all_rollout_obs(self, obs: torch.Tensor | np.ndarray):
         if isinstance(obs, np.ndarray):
             obs = torch.from_numpy(obs)
 

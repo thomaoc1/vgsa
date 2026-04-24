@@ -1,5 +1,6 @@
 import logging
 from collections import deque
+from typing import override
 
 import torch
 import torch.nn.functional as F
@@ -65,14 +66,16 @@ class RamRolloutHelper(BaseRolloutHelper):
     def get_action_sequence(self, idx: int) -> tuple[int, ...]:
         return self.action_enumeration[idx]
 
-    def collect_baseline_observation(self, obs: torch.Tensor | np.ndarray):
+    @override
+    def collect_baseline_obs(self, obs: torch.Tensor | np.ndarray):
         ram_state = torch.from_numpy(self.env.get_stacked_ram_obs())
         if isinstance(obs, np.ndarray):
             obs = torch.from_numpy(obs)
         baseline_ram_state = self._compute_agent_trajectory(ram_state, obs, self.baseline_obs_dist)
         return baseline_ram_state[:, -1]
 
-    def collect_all_rollout_observations(self, obs: torch.Tensor):
+    @override
+    def collect_all_rollout_obs(self, obs: torch.Tensor):
         current_ram_state = torch.from_numpy(self.env.get_stacked_ram_obs())
         current_actions = self.onehot_action.float()
 

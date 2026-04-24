@@ -1,4 +1,4 @@
-from typing import Protocol, cast
+from typing import Protocol, cast, override
 
 import numpy as np
 import torch
@@ -52,10 +52,12 @@ class EncObsRolloutHelper(BaseRolloutHelper):
     def get_action_sequence(self, idx: int) -> tuple[int, ...]:
         return self.action_enumeration[idx]
 
-    def collect_baseline_observation(self, initial_state: torch.Tensor):
+    @override
+    def collect_baseline_obs(self, initial_state: torch.Tensor):
         return self._compute_agent_trajectory(initial_state, self.baseline_obs_dist)
 
-    def collect_all_rollout_observations(self, initial_state: torch.Tensor):
+    @override
+    def collect_all_rollout_obs(self, initial_state: torch.Tensor):
         current_actions = self.onehot_action.float()
         current_states = self.victim.enc_obs(initial_state)
 

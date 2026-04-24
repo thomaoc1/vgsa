@@ -34,27 +34,27 @@ class VGSAAttacker(BaseAttacker):
         self.current_attack_action_seq = None
         self.current_attack_action_seq_idx = 0
 
-    def _attack(self, observation: VecEnvObs) -> VecEnvObs:
+    def _attack(self, obs: VecEnvObs) -> VecEnvObs:
         assert self.current_attack_action_seq is not None, "Current action sequence is None."
 
         target_action = torch.tensor(self.current_attack_action_seq[self.current_attack_action_seq_idx]).unsqueeze(0)
-        tens_observation = torch.from_numpy(observation)
-        adversarial_observation = self._perturbation_method(tens_observation, target_action).numpy()
+        tens_obs = torch.from_numpy(obs)
+        adversarial_obs = self._perturbation_method(tens_obs, target_action).numpy()
 
         self.current_attack_action_seq_idx += 1
         if self.current_attack_action_seq_idx == len(self.current_attack_action_seq):
             self.current_attack_action_seq = None
             self.current_attack_action_seq_idx = 0
 
-        return adversarial_observation
+        return adversarial_obs
 
     def step(self, observation: VecEnvObs) -> tuple[VecEnvObs, bool]:
         if self.current_attack_action_seq is not None:
             return self._attack(observation), True
 
         with torch.no_grad():
-            baseline_obs = self.rollout_helper.collect_baseline_observation(observation)
-            all_final_obs = self.rollout_helper.collect_all_rollout_observations(observation)
+            baseline_obs = self.rollout_helper.collect_baseline_obs(observation)
+            all_final_obs = self.rollout_helper.collect_all_rollout_obs(observation)
 
             if not self.is_encoded:
                 baseline_value = self.victim.eval_state(baseline_obs)
