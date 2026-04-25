@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 
 import ale_py
 import gymnasium as gym
@@ -10,6 +10,8 @@ from src.run_attack.util import init_attacker
 from src.util.agent import init_agent
 from src.util.config.definitions import AttackerConfig, EnvConfig, PolicyConfig
 from src.util.config.paths import CONFIG_PATH
+from src.util.logger.config_summary import run_attack_summary
+from src.util.logger.wandb_logger import WandbLogger
 from src.util.path_builder import PolicyPaths, PredictionModelPaths
 from src.util.sb3_env import init_env
 from src.util.set_global_seed import set_global_seed
@@ -18,6 +20,11 @@ from src.victim.enc_dqn_victim import EncDQNVictim
 
 gym.register_envs(ale_py)
 SEED = 101
+
+ATTACK_SUMMARY_METRICS = {
+    "ep_rew": ["mean", "std"],
+    "n_attacks": ["mean", "std"],
+}
 
 
 @dataclass
@@ -76,9 +83,18 @@ def main(cfg: DictConfig):
         env_n_actions=run_attack_cfg.gym_env.n_actions,
         prediction_model_path_builder=prediction_model_path_builder,
     )
+    
+    logger = WandbLogger(
+        experiment_group="run_attack",
+        config=run_attack_summary(asdict(run_attack_cfg)),
+        summary_metrics=ATTACK_SUMMARY_METRICS,
+    )
 
-    runner = AttackRunner(env, attacker, victim)
-    runner.run(100)
+    runner = AttackRunner(env, attacker, victim, logger=logger)
+    try:
+        runner.run(run_attack_cfg.n_episodes)
+    finally:
+        logger.finish()
 
 
 if __name__ == "__main__":

@@ -5,6 +5,7 @@ from torch.optim import Adam, Optimizer
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torch.utils.data import DataLoader
 
+from src.util.logger.common.protocol import LoggerProtocol
 from src.util.path_builder import PredictionModelPaths
 
 from .common import FrameCycler
@@ -18,8 +19,9 @@ class ObsPredictionModelTrainer(PredictionModelTrainer):
         num_actions,
         prediction_model_path_builder: PredictionModelPaths,
         teacher_forcing: bool = True,
+        logger: LoggerProtocol | None = None,
     ):
-        super().__init__(model, num_actions, prediction_model_path_builder, teacher_forcing)
+        super().__init__(model, num_actions, prediction_model_path_builder, teacher_forcing, logger)
         self._frame_cycler = FrameCycler()
 
     def _run_epoch(self, loader: DataLoader, teacher_forcing_prob: float, optimiser: Optimizer | None = None) -> float:
@@ -87,9 +89,19 @@ class ObsPredictionModelTrainer(PredictionModelTrainer):
             self.validation_losses.append(validation_loss)
             lr_scheduler.step(validation_loss)
 
+            current_lr = lr_scheduler.get_last_lr()[-1]
             print(
-                f"Epoch {epoch} (LR: {lr_scheduler.get_last_lr()[-1]}, TF: {teacher_forcing_prob:.2f}):"
+                f"Epoch {epoch} (LR: {current_lr}, TF: {teacher_forcing_prob:.2f}):"
                 f" \n\tTraining: {training_loss} \n\tValidation: {validation_loss}"
+            )
+            self._log(
+                {
+                    "epoch": epoch,
+                    "train_loss": training_loss,
+                    "val_loss": validation_loss,
+                    "lr": current_lr,
+                    "teacher_forcing": teacher_forcing_prob,
+                }
             )
 
         self.save()

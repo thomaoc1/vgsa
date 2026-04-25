@@ -77,6 +77,14 @@ class RAMPredictionModelTrainer(PredictionModelTrainer):
                 f"Val Loss = {val_loss:.4f},"
                 f" Teacher forcing prob = {teacher_forcing_prob:.4f}"
             )
+            self._log(
+                {
+                    "epoch": epoch,
+                    "train_loss": train_loss,
+                    "val_loss": val_loss,
+                    "teacher_forcing": teacher_forcing_prob,
+                }
+            )
             self.save()
 
         return self._get_results()

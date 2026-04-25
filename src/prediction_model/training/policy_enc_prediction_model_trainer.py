@@ -69,10 +69,20 @@ class PolicyEncodingPredictionModelTrainer(PredictionModelTrainer):
             self.validation_losses.append(validation_loss)
             scheduler.step(validation_loss)
 
+            current_lr = optimiser.param_groups[0]["lr"]
             print(
-                f"Epoch {epoch} (LR: {optimiser.param_groups[0]['lr']:.6f}, TF: {teacher_forcing_prob}):"
+                f"Epoch {epoch} (LR: {current_lr:.6f}, TF: {teacher_forcing_prob}):"
                 f"\n\tTraining: {train_loss:.3f}"
                 f"\n\tValidation: {validation_loss:.3f}"
+            )
+            self._log(
+                {
+                    "epoch": epoch,
+                    "train_loss": train_loss,
+                    "val_loss": validation_loss,
+                    "lr": current_lr,
+                    "teacher_forcing": teacher_forcing_prob,
+                }
             )
 
         self.save()

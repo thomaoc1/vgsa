@@ -1,0 +1,78 @@
+_wandb:
+    value:
+        cli_version: 0.26.1
+        e:
+            csihp8gtzt5oxzzm87z8flzad40q70b8:
+                apple:
+                    ecpuCores: 6
+                    gpuCores: 10
+                    macModel: Mac16,10
+                    memoryGb: 16
+                    name: Apple M4
+                    pcpuCores: 4
+                    ramTotalBytes: "17179869184"
+                    swapTotalBytes: "3221225472"
+                args:
+                    - attacker=vgsa
+                    - policy=dqn
+                cpu_count: 10
+                cpu_count_logical: 10
+                disk:
+                    /:
+                        total: "494384795648"
+                        used: "107341766656"
+                email: thomas.ocuilleanain@pm.me
+                executable: /Users/thomaoc/Projects/Misc/vgsa/.venv/bin/python
+                git:
+                    commit: 8dc1bb49f753959208e25e4334ba95dde3c2b549
+                    remote: git@github.com:thomaoc1/vgsa.git
+                host: Thomass-Mac-mini.local
+                memory:
+                    total: "17179869184"
+                os: macOS-26.3.1-arm64-arm-64bit
+                program: -m src.run_attack.run
+                python: CPython 3.12.13
+                root: /Users/thomaoc/Projects/Misc/vgsa
+                startedAt: "2026-04-24T12:58:02.838958Z"
+                writerId: csihp8gtzt5oxzzm87z8flzad40q70b8
+        m: []
+        python_version: 3.12.13
+        t:
+            "1":
+                - 1
+                - 50
+            "2":
+                - 1
+                - 50
+            "3":
+                - 16
+            "4": 3.12.13
+            "5": 0.26.1
+            "12": 0.26.1
+            "13": darwin-arm64
+attacker:
+    value:
+        attack_threshold: 1
+        is_encoded: false
+        n_actions: 6
+        name: vgsa
+        perturbation_type: CW
+        rollout_helper: '{''action_enum_len'': 2, ''baseline_obs_dist'': 2}'
+        uses_ram: false
+episode_max_frames:
+    value: .inf
+gym_env:
+    value:
+        n_actions: 6
+        n_envs: 1
+        name: PongNoFrameskip-v4
+        render_mode: null
+n_episodes:
+    value: 100
+policy:
+    value:
+        agent_normalise_obs: true
+        agent_parameters: '{''policy'': ''CnnPolicy'', ''buffer_size'': 100000, ''learning_rate'': 0.0001, ''batch_size'': 32, ''learning_starts'': 100000, ''target_update_interval'': 1000, ''train_freq'': 4, ''gradient_steps'': 1, ''exploration_fraction'': 0.1, ''exploration_final_eps'': 0.01, ''optimize_memory_usage'': False}'
+        name: DQN
+        rms_prop_tf_like: false
+        seed: 0

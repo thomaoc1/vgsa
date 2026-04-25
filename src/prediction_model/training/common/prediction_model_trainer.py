@@ -4,6 +4,7 @@ from abc import ABC, abstractmethod
 import torch
 from torch.utils.data import DataLoader
 
+from src.util.logger.common.protocol import LoggerProtocol
 from src.util.path_builder import PredictionModelPaths
 
 
@@ -14,6 +15,7 @@ class PredictionModelTrainer(ABC):
         num_actions: int,
         prediction_model_path_builder: PredictionModelPaths,
         teacher_forcing: bool = True,
+        logger: LoggerProtocol | None = None,
     ):
         self.prediction_model_path_builder = prediction_model_path_builder
         self.n_actions = num_actions
@@ -22,6 +24,7 @@ class PredictionModelTrainer(ABC):
         self.device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
         self.model = model.to(self.device)
         self.epochs: int | None = None
+        self.logger = logger
 
         self.train_losses = []
         self.validation_losses = []
@@ -31,6 +34,10 @@ class PredictionModelTrainer(ABC):
 
     def _get_results(self) -> tuple[list, list]:
         return self.train_losses, self.validation_losses
+
+    def _log(self, step_result: dict) -> None:
+        if self.logger is not None:
+            self.logger.log(step_result)
 
     def save(self):
         print(f"Saving model to: {self.prediction_model_path_builder.model_weights()}")

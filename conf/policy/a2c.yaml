@@ -3,5 +3,4 @@ agent_parameters:
   policy: 'CnnPolicy'
   ent_coef: 0.01
   vf_coef: 0.25
-
 rms_prop_tf_like: True
