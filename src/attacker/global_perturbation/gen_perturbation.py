@@ -19,8 +19,8 @@ from .global_perturbation_generator import GlobalPerturbationGenerator
 
 @dataclass
 class GlobalPerturbationGeneratorConfig:
-    env: EnvConfig
-    policy_cfg: PolicyConfig
+    gym_env: EnvConfig
+    policy: PolicyConfig
     dataset_name: str
     device: str = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -28,30 +28,30 @@ class GlobalPerturbationGeneratorConfig:
 @hydra.main(version_base=None, config_path=CONFIG_PATH, config_name="gen_perturbation")
 def main(cfg: DictConfig):
     gpg_config = GlobalPerturbationGeneratorConfig(**cfg)  # pyright: ignore[reportCallIssue]
-    gpg_config.env = EnvConfig(**cfg.env)
-    gpg_config.policy_cfg = PolicyConfig(**cfg.policy_cfg)
+    gpg_config.gym_env = EnvConfig(**cfg.gym_env)
+    gpg_config.policy = PolicyConfig(**cfg.policy)
 
     policy_paths = PolicyPaths(
-        algo=gpg_config.policy_cfg.name,
-        env=gpg_config.env.name,
-        seed=gpg_config.policy_cfg.seed,
+        algo=gpg_config.policy.name,
+        env=gpg_config.gym_env.name,
+        seed=gpg_config.policy.seed,
     )
 
     dataset_paths = DatasetPaths(
-        algo=gpg_config.policy_cfg.name,
-        env=gpg_config.env.name,
-        agent_seed=gpg_config.policy_cfg.seed,
+        algo=gpg_config.policy.name,
+        env=gpg_config.gym_env.name,
+        agent_seed=gpg_config.policy.seed,
         encoded=False,
     )
 
-    policy = init_agent(gpg_config.policy_cfg, device=gpg_config.device, path_builder=policy_paths)
+    policy = init_agent(gpg_config.policy, device=gpg_config.device, path_builder=policy_paths)
 
-    if gpg_config.policy_cfg.name.upper() == "DQN":
+    if gpg_config.policy.name.upper() == "DQN":
         victim_agent = DQNVictim(policy)
     else:
         victim_agent = ActorCriticVictim(policy)
 
-    gpg = GlobalPerturbationGenerator(policy=victim_agent, n_actions=gpg_config.env.n_actions, device=gpg_config.device)
+    gpg = GlobalPerturbationGenerator(policy=victim_agent, n_actions=gpg_config.gym_env.n_actions, device=gpg_config.device)
 
     sas_dataset = TransitionDataset.load(gpg.n_actions, dataset_paths.train_file)
     so_dataset = ObservationDataset(sas_dataset)

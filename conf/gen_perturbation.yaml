@@ -1,6 +1,6 @@
 defaults:
-  - env: pong
-  - sb3_algo: a2c
+  - gym_env: pong
+  - policy: a2c
   - _self_
 
 dataset_name: "train"
