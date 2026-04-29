@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Dict, Any 
+from typing import Dict, Any
 
 
 @dataclass
@@ -25,9 +25,6 @@ class PredictionModelConfig:
     model_kwargs: Dict[str, Any] = field(default_factory=dict)
     unique_name: str | None = None
     seed: int = 42
-
-
-
 
 
 @dataclass

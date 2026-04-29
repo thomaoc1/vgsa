@@ -1,6 +1,5 @@
 import math
 from abc import ABC, abstractmethod
-from collections.abc import Generator
 
 import torch
 from torch.utils.data import DataLoader
@@ -45,7 +44,5 @@ class PredictionModelTrainer(ABC):
             return 0
 
     @abstractmethod
-    def train(
-        self, train_loader: DataLoader, val_loader: DataLoader, epochs: int, lr: float = 1e-4
-    ) -> None:
+    def train(self, train_loader: DataLoader, val_loader: DataLoader, epochs: int, lr: float = 1e-4) -> None:
         pass

@@ -49,9 +49,7 @@ class PolicyEncodingPredictionModelTrainer(PredictionModelTrainer):
         n_batches = len(loader)
         return total_loss / n_batches
 
-    def train(
-        self, train_loader: DataLoader, val_loader: DataLoader, epochs: int = 30, lr: float = 1e-4
-    ) -> None:
+    def train(self, train_loader: DataLoader, val_loader: DataLoader, epochs: int = 30, lr: float = 1e-4) -> None:
         optimiser = Adam(self.model.parameters(), lr=lr)
         scheduler = ReduceLROnPlateau(optimiser, mode="min", factor=0.5, patience=5)
         self.epochs = epochs

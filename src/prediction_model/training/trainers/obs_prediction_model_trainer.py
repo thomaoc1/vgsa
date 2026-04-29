@@ -67,9 +67,7 @@ class ObsPredictionModelTrainer(PredictionModelTrainer):
 
         return total_epoch_loss / len(loader)
 
-    def train(
-        self, train_loader: DataLoader, val_loader: DataLoader, epochs: int, lr: float = 1e-4
-    ) -> None:
+    def train(self, train_loader: DataLoader, val_loader: DataLoader, epochs: int, lr: float = 1e-4) -> None:
         optimiser = Adam(self.model.parameters(), lr=lr)
         self.epochs = epochs
 
