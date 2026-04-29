@@ -1,6 +1,7 @@
-# VGSA
+# Value-Guided Strategic Attack (VGSA)
+Attack on DRL policies which uses a learned environment transition function and leverages the victim policy's value estimate to dictate the direction of the attack. 
 
-Value-Guided Strategic Attack (VGSA) for DRL policies, with Hydra-based pipelines for:
+Uses Hydra-based pipelines for:
 1. rollout collection,
 2. next-state prediction model training,
 3. perturbation mask generation,
