@@ -1,12 +1,12 @@
 from dataclasses import dataclass, field
-from typing import Dict, Any, List, Optional, Tuple
+from typing import Dict, Any 
 
 
 @dataclass
 class EnvConfig:
     name: str
     n_actions: int
-    render_mode: Optional[str] = None
+    render_mode: str | None = None
     n_envs: int = 1
 
 
@@ -27,26 +27,7 @@ class PredictionModelConfig:
     seed: int = 42
 
 
-@dataclass
-class PredictionModelTrainerConfig:
-    env: EnvConfig
-    next_state_pm: PredictionModelConfig
-    sb3_algo: PolicyConfig
-    trainer: str
-    state_processor: Optional[str]
-    dataset_name: str
-    victim_policy: bool = True
-    lr: Optional[float] = None
-    curriculum: Optional[List[Tuple[int, int, float]]] = None
-    k: Optional[int] = None
-    epochs: Optional[int] = None
-    batch_size: Optional[int] = None
-    kwargs: Optional[Dict[str, Any]] = None
-    kl_loss: bool = True
-    value_loss: bool = True
-    load: bool = False
-    suffix: Optional[str] = None
-    model_kwargs: Dict[str, Any] = field(default_factory=dict)
+
 
 
 @dataclass

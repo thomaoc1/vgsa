@@ -1,0 +1,39 @@
+{
+  "os":  "macOS-26.3.1-arm64-arm-64bit",
+  "python":  "CPython 3.12.13",
+  "startedAt":  "2026-04-29T15:11:06.382542Z",
+  "args":  [
+    "policy=ppo"
+  ],
+  "program":  "-m src.prediction_model.training.run",
+  "git":  {
+    "remote":  "git@github.com:thomaoc1/vgsa.git",
+    "commit":  "d0b1a0417e9269f2788e464bae87ac5de58122c9"
+  },
+  "email":  "thomas.ocuilleanain@pm.me",
+  "root":  "/Users/thomaoc/Projects/Misc/vgsa",
+  "host":  "Thomass-Mac-mini.local",
+  "executable":  "/Users/thomaoc/Projects/Misc/vgsa/.venv/bin/python",
+  "cpu_count":  10,
+  "cpu_count_logical":  10,
+  "disk":  {
+    "/":  {
+      "total":  "494384795648",
+      "used":  "108150841344"
+    }
+  },
+  "memory":  {
+    "total":  "17179869184"
+  },
+  "apple":  {
+    "name":  "Apple M4",
+    "ecpuCores":  6,
+    "pcpuCores":  4,
+    "gpuCores":  10,
+    "memoryGb":  16,
+    "swapTotalBytes":  "2147483648",
+    "ramTotalBytes":  "17179869184",
+    "macModel":  "Mac16,10"
+  },
+  "writerId":  "4hcnbik82puo7rmrzbkoiumnxayz78qn"
+}

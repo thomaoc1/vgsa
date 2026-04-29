@@ -34,7 +34,7 @@ class GenDataConfig:
     policy: PolicyConfig
     n_frames: int
     dataset_save_name: str
-    eps: float = 0.0
+    eps: float = 0.2
     encode: bool = False
     is_ram_env: bool = False
     max_episode_steps: int | float = float("+inf")
@@ -84,7 +84,7 @@ def run_episode(
             raise ValueError("Only np.ndarray observations are supported.")
 
         if random.random() < gen_data_cfg.eps:
-            action = env.action_space.sample()
+            action = np.array([env.action_space.sample()])
         else:
             action = agent.choose_action(scaled_observation, deterministic=True)
 

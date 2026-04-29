@@ -1,0 +1,1 @@
+{"_wandb":{"runtime":28},"_timestamp":1.777475731038124e+09,"train_loss":{"min":655.3457641601562},"_runtime":28,"val_loss":{"min":329.7125549316406},"_step":0,"teacher_forcing":0.9829629131445341,"epoch":1,"lr":0.0001}

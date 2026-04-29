@@ -1,0 +1,85 @@
+_wandb:
+    value:
+        cli_version: 0.26.1
+        e:
+            4hcnbik82puo7rmrzbkoiumnxayz78qn:
+                apple:
+                    ecpuCores: 6
+                    gpuCores: 10
+                    macModel: Mac16,10
+                    memoryGb: 16
+                    name: Apple M4
+                    pcpuCores: 4
+                    ramTotalBytes: "17179869184"
+                    swapTotalBytes: "2147483648"
+                args:
+                    - policy=ppo
+                cpu_count: 10
+                cpu_count_logical: 10
+                disk:
+                    /:
+                        total: "494384795648"
+                        used: "108150841344"
+                email: thomas.ocuilleanain@pm.me
+                executable: /Users/thomaoc/Projects/Misc/vgsa/.venv/bin/python
+                git:
+                    commit: d0b1a0417e9269f2788e464bae87ac5de58122c9
+                    remote: git@github.com:thomaoc1/vgsa.git
+                host: Thomass-Mac-mini.local
+                memory:
+                    total: "17179869184"
+                os: macOS-26.3.1-arm64-arm-64bit
+                program: -m src.prediction_model.training.run
+                python: CPython 3.12.13
+                root: /Users/thomaoc/Projects/Misc/vgsa
+                startedAt: "2026-04-29T15:11:06.382542Z"
+                writerId: 4hcnbik82puo7rmrzbkoiumnxayz78qn
+        m:
+            - "1": train_loss
+              "6":
+                - 3
+              "7":
+                - 1
+            - "1": val_loss
+              "6":
+                - 3
+              "7":
+                - 1
+        python_version: 3.12.13
+        t:
+            "1":
+                - 1
+                - 50
+            "2":
+                - 1
+                - 50
+            "3":
+                - 7
+                - 16
+                - 63
+            "4": 3.12.13
+            "5": 0.26.1
+            "12": 0.26.1
+            "13": darwin-arm64
+batch_size:
+    value: 64
+env:
+    value: PongNoFrameskip-v4
+epochs:
+    value: 25
+lookahead_horizon:
+    value: 3
+lr:
+    value: 0.0001
+model_seed:
+    value: 42
+model_type:
+    value: ObsPredictionModel
+policy:
+    value: PPO
+policy_seed:
+    value: 0
+teacher_forcing:
+    value: true
+trainer:
+    value: ObsPredictionModelTrainer

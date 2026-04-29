@@ -11,7 +11,7 @@ class TransitionDataset(Dataset):
         self.episodes = [] if not episodes else episodes
 
         self.n_actions = n_actions
-        self.k = 1
+        self.lookahead_horizon = 1
 
     def add_episode(
         self,
@@ -35,7 +35,7 @@ class TransitionDataset(Dataset):
         return len(self.sample_map)
 
     def _pad_tensor(self, padee):
-        pad_length = self.k - len(padee)
+        pad_length = self.lookahead_horizon - len(padee)
         repeated_value = padee[-1].unsqueeze(0)
         padded_padee = torch.concat([padee, repeated_value.repeat_interleave(pad_length, dim=0)])
         return padded_padee
@@ -45,10 +45,10 @@ class TransitionDataset(Dataset):
         episode = self.episodes[episode_idx]
 
         current_state = episode["states"][t]
-        next_states = episode["states"][t + 1 : t + 1 + self.k]
-        actions = episode["actions"][t : t + self.k]
+        next_states = episode["states"][t + 1 : t + 1 + self.lookahead_horizon]
+        actions = episode["actions"][t : t + self.lookahead_horizon]
 
-        if len(next_states) < self.k:
+        if len(next_states) < self.lookahead_horizon:
             next_states = self._pad_tensor(next_states)
             actions = self._pad_tensor(actions)
 
@@ -57,7 +57,7 @@ class TransitionDataset(Dataset):
     def subset(self, indices: list[int]) -> "TransitionDataset":
         subset_sample_map = [self.sample_map[i] for i in indices]
         subset = TransitionDataset(self.n_actions, episodes=self.episodes, sample_map=subset_sample_map)
-        subset.k = self.k
+        subset.lookahead_horizon = self.lookahead_horizon
         return subset
 
     def save(self, path):

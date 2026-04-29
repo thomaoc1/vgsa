@@ -21,11 +21,6 @@ from src.victim.enc_dqn_victim import EncDQNVictim
 gym.register_envs(ale_py)
 SEED = 101
 
-ATTACK_SUMMARY_METRICS = {
-    "ep_rew": ["mean"],
-    "n_attacks": ["mean"],
-}
-
 
 @dataclass
 class RunAttackConfig:

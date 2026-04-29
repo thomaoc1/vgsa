@@ -1,4 +1,3 @@
-from collections.abc import Generator
 import torch
 import torch.nn.functional as F
 from torch.nn.utils import clip_grad_norm_
@@ -51,10 +50,10 @@ class ObsPredictionModelTrainer(PredictionModelTrainer):
                 predicted_next_state = self.model(states, current_one_hot_action).unsqueeze(1)
                 recon_mse = F.mse_loss(predicted_next_state, target_next_state, reduction="none")
                 loss = recon_mse.view(target_next_state.size(0), -1).sum(dim=1).mean()
-                k_losses[predictive_step] = loss.item()
+                k_losses[predictive_step] = loss
 
                 if not optimiser or torch.rand(1).item() > teacher_forcing_prob:
-                    states = predicted_next_state
+                    states = self._frame_cycler.cycle_frames(predicted_next_state)
                 else:
                     states = self._frame_cycler.cycle_frames(next_states[:, predictive_step, -1])
 
