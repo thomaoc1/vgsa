@@ -51,7 +51,7 @@ class PolicyEncodingPredictionModelTrainer(PredictionModelTrainer):
 
     def train(
         self, train_loader: DataLoader, val_loader: DataLoader, epochs: int = 30, lr: float = 1e-4
-    ) -> tuple[list, list]:
+    ) -> None:
         optimiser = Adam(self.model.parameters(), lr=lr)
         scheduler = ReduceLROnPlateau(optimiser, mode="min", factor=0.5, patience=5)
         self.epochs = epochs
@@ -60,13 +60,11 @@ class PolicyEncodingPredictionModelTrainer(PredictionModelTrainer):
             self.model.train()
             teacher_forcing_prob = self.teacher_forcing_schedule(epoch, total_epochs=epochs)
             train_loss = self._run_epoch(train_loader, teacher_forcing_prob, optimiser=optimiser)
-            self.train_losses.append(train_loss)
 
             self.model.eval()
             with torch.no_grad():
                 validation_loss = self._run_epoch(val_loader, teacher_forcing_prob=0)
 
-            self.validation_losses.append(validation_loss)
             scheduler.step(validation_loss)
 
             current_lr = optimiser.param_groups[0]["lr"]
@@ -86,4 +84,3 @@ class PolicyEncodingPredictionModelTrainer(PredictionModelTrainer):
             )
 
         self.save()
-        return self._get_results()

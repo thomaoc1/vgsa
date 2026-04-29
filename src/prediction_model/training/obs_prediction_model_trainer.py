@@ -1,3 +1,4 @@
+from collections.abc import Generator
 import torch
 import torch.nn.functional as F
 from torch.nn.utils import clip_grad_norm_
@@ -69,7 +70,7 @@ class ObsPredictionModelTrainer(PredictionModelTrainer):
 
     def train(
         self, train_loader: DataLoader, val_loader: DataLoader, epochs: int, lr: float = 1e-4
-    ) -> tuple[list, list]:
+    ) -> None:
         optimiser = Adam(self.model.parameters(), lr=lr)
         self.epochs = epochs
 
@@ -80,13 +81,11 @@ class ObsPredictionModelTrainer(PredictionModelTrainer):
             teacher_forcing_prob = self.teacher_forcing_schedule(epoch, total_epochs=epochs)
             self.model.train()
             training_loss = self._run_epoch(train_loader, teacher_forcing_prob, optimiser=optimiser)
-            self.train_losses.append(training_loss)
 
             self.model.eval()
             with torch.no_grad():
                 validation_loss = self._run_epoch(val_loader, teacher_forcing_prob=0)
 
-            self.validation_losses.append(validation_loss)
             lr_scheduler.step(validation_loss)
 
             current_lr = lr_scheduler.get_last_lr()[-1]
@@ -105,4 +104,3 @@ class ObsPredictionModelTrainer(PredictionModelTrainer):
             )
 
         self.save()
-        return self._get_results()

@@ -1,5 +1,6 @@
 import math
 from abc import ABC, abstractmethod
+from collections.abc import Generator
 
 import torch
 from torch.utils.data import DataLoader
@@ -26,14 +27,8 @@ class PredictionModelTrainer(ABC):
         self.epochs: int | None = None
         self.logger = logger
 
-        self.train_losses = []
-        self.validation_losses = []
-
     def _init_base_filename(self, run_name: str):
         return f"{self.save_name_prefix}{f'_{run_name}' if run_name else ''}"
-
-    def _get_results(self) -> tuple[list, list]:
-        return self.train_losses, self.validation_losses
 
     def _log(self, step_result: dict) -> None:
         if self.logger is not None:
@@ -52,5 +47,5 @@ class PredictionModelTrainer(ABC):
     @abstractmethod
     def train(
         self, train_loader: DataLoader, val_loader: DataLoader, epochs: int, lr: float = 1e-4
-    ) -> tuple[list, list]:
+    ) -> None:
         pass

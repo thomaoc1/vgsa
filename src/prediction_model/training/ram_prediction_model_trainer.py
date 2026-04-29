@@ -57,20 +57,16 @@ class RAMPredictionModelTrainer(PredictionModelTrainer):
 
         return epoch_loss / len(loader)
 
-    def train(
-        self, train_loader: DataLoader, val_loader: DataLoader, epochs: int = 100, lr: float = 0.03
-    ) -> tuple[list, list]:
+    def train(self, train_loader: DataLoader, val_loader: DataLoader, epochs: int = 100, lr: float = 0.03) -> None:
         optimizer = torch.optim.Adam(self.model.parameters())
 
         for epoch in range(epochs):
             teacher_forcing_prob = self.teacher_forcing_schedule(epoch, total_epochs=epochs)
             self.model.train()
             train_loss = self._iteration(train_loader, teacher_forcing_prob, optimizer)
-            self.train_losses.append(train_loss)
 
             self.model.eval()
             val_loss = self._iteration(val_loader, teacher_forcing_prob=0)
-            self.validation_losses.append(val_loss)
 
             print(
                 f"Epoch {epoch}: Train Loss = {train_loss:.4f}, "
@@ -86,8 +82,6 @@ class RAMPredictionModelTrainer(PredictionModelTrainer):
                 }
             )
             self.save()
-
-        return self._get_results()
 
     def save(self):
         print(f"Saving model to: {self.prediction_model_path_builder.ram_model_weights()}")
