@@ -22,8 +22,8 @@ gym.register_envs(ale_py)
 SEED = 101
 
 ATTACK_SUMMARY_METRICS = {
-    "ep_rew": ["mean", "std"],
-    "n_attacks": ["mean", "std"],
+    "ep_rew": ["mean"],
+    "n_attacks": ["mean"],
 }
 
 
@@ -83,16 +83,22 @@ def main(cfg: DictConfig):
         env_n_actions=run_attack_cfg.gym_env.n_actions,
         prediction_model_path_builder=prediction_model_path_builder,
     )
-    
+
     logger = WandbLogger(
         experiment_group="run_attack",
         config=run_attack_summary(asdict(run_attack_cfg)),
-        summary_metrics=ATTACK_SUMMARY_METRICS,
     )
 
-    runner = AttackRunner(env, attacker, victim, logger=logger)
+    runner = AttackRunner(
+        env,
+        attacker,
+        victim,
+        episode_max_frames=run_attack_cfg.episode_max_frames,
+    )
+
     try:
-        runner.run(run_attack_cfg.n_episodes)
+        result = runner.run(run_attack_cfg.n_episodes)
+        logger.log(asdict(result))
     finally:
         logger.finish()
 

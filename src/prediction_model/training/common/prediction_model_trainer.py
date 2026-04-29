@@ -50,5 +50,7 @@ class PredictionModelTrainer(ABC):
             return 0
 
     @abstractmethod
-    def train(self, train_loader: DataLoader, val_loader: DataLoader, **kwargs) -> tuple[list, list]:
+    def train(
+        self, train_loader: DataLoader, val_loader: DataLoader, epochs: int, lr: float = 1e-4
+    ) -> tuple[list, list]:
         pass
