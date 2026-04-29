@@ -1,0 +1,8 @@
+defaults:
+  - gym_env: pong
+  - policy: a2c
+  - next_state_pm: atari_obs
+  - next_state_pm_trainer@_global_: atari_obs
+  - _self_
+
+dataset_name: "train"

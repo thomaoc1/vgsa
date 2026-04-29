@@ -1,5 +1,0 @@
-model_type: "PolicyEncodingPredictionModel"
-
-model_kwargs: {
-  n_actions: "${env.n_actions}",
-}

@@ -1,0 +1,3 @@
+lookahead_horizon: 3
+epochs: 50
+batch_size: 64

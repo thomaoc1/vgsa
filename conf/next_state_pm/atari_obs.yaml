@@ -1,0 +1,4 @@
+defaults:
+  - atari_base
+  
+model_type: "ObsPredictionModel"

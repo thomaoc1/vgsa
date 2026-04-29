@@ -1,0 +1,3 @@
+model_kwargs: {
+  n_actions: "${gym_env.n_actions}",
+}
